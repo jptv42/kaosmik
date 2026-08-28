@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\AuthController;
 use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
@@ -9,4 +10,8 @@ $routes->group('admin',['filter '=>'group-admin'],function($routes){
 
 });
 
-service('auth')->routes($routes);
+$routes->get('login',[AuthController::class,'loginView']);
+$routes->post('login',[AuthController::class,'loginAction']);
+$routes->get('register',[AuthController::class,'registerView']);
+$routes->post('register',[AuthController::class,'registerAction']);
+$routes->get('logout',[AuthController::class,'logoutAction']);

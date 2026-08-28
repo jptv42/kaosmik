@@ -4,7 +4,7 @@
         <base href="<?= base_url();?>"
         <meta  charset = "utf-8">
         <meta name="viewport" content="width=device-width",initial-scale="1.0, shrink-to-fit=no"> <!--responsive par defaut-->
-        <title><?= $title ?? "Zoologik"?> </title>
+        <title><?= $title ?? "Kaosmik"?> </title>
         <meta name="description" content="<?= $description ?? "" ?>">
         <meta name="author" content="<?= $author ?? "" ?>">
         <meta name="keyword" content="<?= $keyword ?? "" ?>">
