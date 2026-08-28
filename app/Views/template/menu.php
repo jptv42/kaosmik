@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg bg-success" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?=base_url();?>">Kaosmik</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,7 +6,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-<               <?php foreach ($menus as $key => $menu):?>
+               <?php foreach ($menus as $key => $menu):?>
                     <li class="nav-item">
                         <a href="<?=base_url($menu['url']); ?>" class="nav-link <?=$current_menu == $key ? "active" : '';?>">
                             <span class="me-2"><?=$menu['icon'];?></span>

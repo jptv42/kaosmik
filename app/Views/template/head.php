@@ -18,8 +18,8 @@
         <script src="<?= base_url("/js/script.js")?>"></script>
 
         <!--BOOTSTRAP-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
 
         <!-- BOOTSTRAP TABLE -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.27.3/dist/bootstrap-table.min.css">
@@ -39,13 +39,11 @@
         <link rel = "stylesheet" href="<?= base_url("/css/toastr.min.css");?>">
 
 </head>
-
-<?php if(isset($menus)):?>
-    <?= view("template/menu",['menus'=>$menus]);?>
-<?php endif;?>
-
 <body>
-<div class="container">
-
-
-
+<div class="page">
+<?php if(isset($menus)):?>
+    <?= view("template/{$layout}/menu",['menus'=>$menus]);?>
+<?php endif;?>
+    <div class="page-wrapper">
+        <div class="page-body">
+            <div class="container">

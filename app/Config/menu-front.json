@@ -1,0 +1,8 @@
+{
+  "animal": {
+    "title" : "Missions",
+    "url" : "/animal",
+    "icon" : "<i class=\"fa-solid fa-paw\"></i>",
+    "class" : ""
+  }
+}

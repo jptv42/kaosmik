@@ -26,18 +26,17 @@ abstract class BaseController extends Controller
      */
 
     protected $session;
-
-    protected $messages = [];
     protected $start_session = true;
 
-    protected $title = "";
+    protected array $messages = [];
 
+    protected $title = "";
     protected $title_suffix = "Zoologik";
-    protected $description="";
+    protected $description = "";
     protected $author = "";
     protected $keywords = "";
-    protected $current_menu ="";
-
+    protected $current_menu = "";
+    protected $layout="front";
 
     /**
      * @return void
@@ -59,41 +58,45 @@ abstract class BaseController extends Controller
         }
     }
 
-    public function render($view = null, $datas=[],$options=[]){
+    public function render($view = null, $datas = [], $options = []) {
         $flashData = session()->getFlashdata('data');
         if ($flashData) {
             $datas = array_merge($datas, $flashData);
         }
+
         $headData = [
-            'title' => sprintf("%s : %s",$this->title, $this->title_suffix),
+            'title' => sprintf("%s : %s", $this->title, $this->title_suffix),
             'description' => $this->description,
             'author' => $this->author,
             'keywords' => $this->keywords,
             'menus' => $this->loadMenu(),
-            'current_menu' => $this->current_menu
+            'current_menu' => $this->current_menu,
+            'user' => auth()->user(),
+            'layout'=> $this->layout,
         ];
 
-        return view('template/head',$headData)
-            .view($view,$datas,$options)
-            .view('template/footer',['messages'=>$this->messages]);
+        return view('template/head', $headData)
+            .view($view, $datas,$options)
+            .view('template/footer', ['messages' => $this->messages]);
     }
 
-    protected function loadMenu(){
+    protected function loadMenu() {
         $filename = APPPATH . "Config";
-        $filename .= "/menu.json";
+        $filename .= "/menu-{$this->layout}.json";
 
-        if(!file_exists($filename)){
-            log_message("error","Menu file not found");
-            return []; /** Retourne un tableau vide s'il n'y pas de donnée */
+        if(!file_exists($filename)) {
+            log_message("error", "Menu file not found");
+            return [];
         }
 
         $json = file_get_contents($filename);
-        $menu = json_decode($json,true);
+        $menu = json_decode($json, true);
 
-        if(!is_array($menu)){
-            log_message("error","Menu json is not an array :" . $filename);
+        if (!is_array($menu)) {
+            log_message("error", "Menu json is not an array : " . $filename);
             return [];
         }
+
         return $menu;
     }
 
@@ -114,37 +117,38 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Ajoute un message de succèes
+     * Ajoute un message de succès
      * @param string $txt Message à afficher
      * @return void
      */
-    public function success($txt){
-        $this->messages[] = ['txt' => $txt, 'class' => 'alert-success','type'=>'success'];
-    }
-    /**
-     *Ajout un message informatif
-     *@param string $txt Message à affihcer
-     *@return void
-     */
-    public function message($txt){
-        $this->messages[] = ['txt' => $txt, 'class' => 'alert-info','type'=>'message'];
+    public function success($txt) {
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-success', 'type' => 'success'];
     }
 
     /**
-     *Ajout un message d'alerte
-     * *@param string $txt Message à affihcer
-     * *@return void
+     * Ajoute un message informatif
+     * @param string $txt Message à afficher
+     * @return void
+     */
+    public function message($txt){
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-info', 'type' => 'info'];
+    }
+
+    /**
+     * Ajout d'un message d'avertissement
+     * @param string $txt Message à afficher
+     * @return void
      */
     public function warning($txt){
-        $this->messages[] = ['txt' => $txt, 'class' => 'alert-warning','type'=>'warning'];
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-warning', 'type' => 'warning'];
     }
 
     /**
      * Ajout d'un message d'erreur
-     * @param string $txt
+     * @param string $txt Message à afficher
      * @return void
      */
     public function error($txt){
-        $this->messages[] = ['txt' => $txt, 'class' => 'alert-danger','type'=>'error'];
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-danger', 'type' => 'error'];
     }
 }
