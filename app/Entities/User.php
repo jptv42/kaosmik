@@ -8,7 +8,7 @@ class User extends ShieldUser
     protected ?Player $player = null;
 
     public function getPlayer(): ?Player {
-        if($this->player === null && !($this->attributes['id'])){
+        if($this->player === null && ($this->attributes['id'])){
             $playerModel = model(Player::class);
             $this->player = $playerModel->findByUserId($this->attributes['id']);
             if(!$this->player){

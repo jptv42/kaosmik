@@ -1,18 +1,18 @@
 {
   "animal": {
-    "title" : "Animal",
+    "title" : "Missions",
     "url" : "/animal",
     "icon" : "<i class=\"fa-solid fa-paw\"></i>",
     "class" : ""
   },
   "employe": {
-    "title" : "Employe",
+    "title" : "Héros",
     "url": "/employe",
     "icon": "<i class=\"fa-regular fa-user\"></i>",
     "class" : ""
   },
   "zone": {
-    "title" : "Zone",
+    "title" : "Inventaire",
     "url" : "/zone",
     "icon" : "<i class=\"fa-solid fa-globe\"></i>",
     "class" : ""
