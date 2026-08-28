@@ -1,8 +1,8 @@
 <div class="row justify-content-center align-items-center my-5">
     <div class="col-12 col-md-6 col-lg-5">
         <div class="card shadow-sm border-0 rounded-3">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
+            <div class="card-body p-3">
+                <div class="text-center mb-3">
                     <h3 class="fw-bold">Inscription</h3>
                     <p class="text-muted small">Rejoignez l'aventure Kaosmik</p>
                 </div>

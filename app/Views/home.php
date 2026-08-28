@@ -1,7 +1,6 @@
 <?php
-    if($user !==null){
-        $user->getPlayer()->credits;
-
-    }else{
-        echo "Va te connecter !";
+    if ($user != null) {
+        echo $user->getPlayer()->credits;
+    } else {
+        echo "Va te connecter";
     }

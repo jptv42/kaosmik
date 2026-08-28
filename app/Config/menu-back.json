@@ -3,7 +3,14 @@
     "title" : "Missions",
     "url" : "/animal",
     "icon" : "<i class=\"fa-solid fa-paw\"></i>",
-    "class" : ""
+    "class" : "",
+    "subs": {
+        "creation": {
+        "title" : "Creation",
+        "url" : "/animal",
+        "icon" : "<i class=\"fa-solid fa-paw\"></i>",
+        "class" : ""}
+    }
   },
   "employe": {
     "title" : "Héros",
@@ -18,4 +25,3 @@
     "class" : ""
   }
 }
-
