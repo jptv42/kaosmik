@@ -1,27 +1,17 @@
 {
-  "animal": {
-    "title" : "Missions",
-    "url" : "/animal",
-    "icon" : "<i class=\"fa-solid fa-paw\"></i>",
-    "class" : "",
-    "subs": {
-        "creation": {
-        "title" : "Creation",
-        "url" : "/animal",
-        "icon" : "<i class=\"fa-solid fa-paw\"></i>",
-        "class" : ""}
-    }
+
+  "Dashboard": {
+    "title" : "Dashboard",
+    "url": "/admin",
+    "icon": "<i class=\"fa-brands fa-black-tie\"></i>",
+    "class" : ""
   },
-  "employe": {
-    "title" : "Héros",
-    "url": "/employe",
+
+  "user": {
+    "title" : "Utilisateurs",
+    "url": "/admin/user",
     "icon": "<i class=\"fa-regular fa-user\"></i>",
     "class" : ""
-  },
-  "zone": {
-    "title" : "Inventaire",
-    "url" : "/zone",
-    "icon" : "<i class=\"fa-solid fa-globe\"></i>",
-    "class" : ""
   }
+
 }

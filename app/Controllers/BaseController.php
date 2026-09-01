@@ -31,7 +31,7 @@ abstract class BaseController extends Controller
     protected array $messages = [];
 
     protected $title = "";
-    protected $title_suffix = "Zoologik";
+    protected $title_suffix = "Kaosmik";
     protected $description = "";
     protected $author = "";
     protected $keywords = "";
@@ -71,7 +71,7 @@ abstract class BaseController extends Controller
             'keywords' => $this->keywords,
             'menus' => $this->loadMenu(),
             'current_menu' => $this->current_menu,
-            'user' => auth()->user(),
+            'logged_user' => auth()->user(),
             'layout'=> $this->layout,
         ];
 
