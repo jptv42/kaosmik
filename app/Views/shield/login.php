@@ -4,7 +4,7 @@
             <div class="card-body p-3">
                 <div class="text-center mb-3">
                     <h3 class="fw-bold">Connexion</h3>
-                    <p class="text-muted small">Retourner voir votre équipage</p>
+                    <img src="<?=base_url('/assets/img/logo-150.png');?>" alt="" class="navbar-brand-img">
                 </div>
 
                 <?php if (session('error') !== null) : ?>

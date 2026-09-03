@@ -4,9 +4,8 @@
             <div class="card-body p-3">
                 <div class="text-center mb-3">
                     <h3 class="fw-bold">Inscription</h3>
-                    <p class="text-muted small">Rejoignez l'aventure Kaosmik</p>
+                    <img src="<?=base_url('/assets/img/logo-150.png');?>" alt="" class="navbar-brand-img">
                 </div>
-
                 <!-- Gestion des erreurs natives de Shield -->
                 <?php if (session('error') !== null) : ?>
                     <div class="alert alert-danger" role="alert">
