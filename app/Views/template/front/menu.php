@@ -4,7 +4,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark pe-0 pe-md-3">
-            <a href="<?= base_url(); ?>">Kaosmik</a>
+            <img src="<?=base_url('/assets/img/favicon/favicon.svg');?>" alt="" class="navbar-brand-img" style="height:auto; width:32px">
         </h1>
         <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav">
