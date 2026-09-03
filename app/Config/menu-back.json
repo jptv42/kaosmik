@@ -12,6 +12,12 @@
     "url": "/admin/user",
     "icon": "<i class=\"fa-regular fa-user\"></i>",
     "class" : ""
-  }
+  },
 
+  "threshold": {
+    "title" : "Threshold",
+    "url": "/admin/level-threshold",
+    "icon": "<i class=\"fa-solid fa-angles-up\"></i>",
+    "class" : ""
+  }
 }

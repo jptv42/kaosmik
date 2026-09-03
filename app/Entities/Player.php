@@ -2,6 +2,7 @@
 
 namespace App\Entities;
 
+use App\Models\LevelThresholdModel;
 use CodeIgniter\Entity\Entity;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Models\UserModel;
@@ -43,5 +44,31 @@ class Player extends Entity
         $this->attributes['user_id'] = $user->id;
 
         return $this;
+    }
+    public function setExperience($exp): self{
+        //Met à jour l'expérience
+        $this->attributes['experience'] = $exp;
+
+        //Vérifie le niveau
+        $newLevel=$this->checkLevel((int)$exp);
+        $this->attributes['level'] = $newLevel;
+        return $this;
+    }
+
+    /**
+     * Calcule le niveau correspondant à un montant d'expérience
+     * @param int $exp Experience à chercher
+     * @return int Niveau correspondant ou par défaut 1
+     */
+    public function checkLevel(int $exp): int{
+        $levelThresholdModel = model(LevelThresholdModel::class);
+
+        //Cherche le niveau le plus élevé débloqué par cette expérience
+        $threshold = $levelThresholdModel
+            ->where('experience_required <=', $exp)
+            ->orderBy('level','DESC')
+            ->first();
+        //On retourne le niveau retrouvé sinon 1
+        return $threshold ? (int) $threshold['level'] : 1;
     }
 }

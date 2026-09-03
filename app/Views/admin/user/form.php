@@ -39,74 +39,78 @@ if (isset($user)) {
                 </div>
                 <div>
                     <label class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="active">
+                        <input class="form-check-input" type="checkbox" name="active" <?= isset($user) && !$user->active ? "" : "checked"; ?>>
                         <span class="form-check-label">Actif</span>
                     </label>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-header">Informations joueur(s)</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        AVATAR
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-center h-100">
-                                    Niveau : <span class="badge rounded-pill text-bg-info ms-3"><?= $user->getPlayer()->level; ?></span>
+        <?php if (isset($user) && $user->getPlayer() !== null)  : ?>
+            <div class="card">
+                <div class="card-header">Informations joueur(s)</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            AVATAR
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center h-100">
+                                        Niveau : <span class="badge rounded-pill text-bg-info ms-3"><?= $user->getPlayer()->level; ?></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-icon">
+                                <div class="col-md-6">
+                                    <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="fa-solid fa-x fa-xs"></i>
                                         <i class="fa-solid fa-p fa-xs"></i>
                                     </span>
-                                    <input type="number" value="<?= isset($user) ? $user->getPlayer()->experience : ""; ?>" name="experience" class="form-control" placeholder="Experience" title="Experience">
+                                        <input type="number" value="<?= isset($user) ? $user->getPlayer()->experience : ""; ?>" name="experience" class="form-control" placeholder="Experience" title="Experience">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="input-icon">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="fa-solid fa-cent-sign"></i>
                                     </span>
-                                    <input type="number" value="<?= isset($user) ? $user->getPlayer()->credits : ""; ?>" name="credits" class="form-control" placeholder="Crédits" title="crédits">
+                                        <input type="number" value="<?= isset($user) ? $user->getPlayer()->credits : ""; ?>" name="credits" class="form-control" placeholder="Crédits" title="crédits">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-icon">
+                                <div class="col-md-6">
+                                    <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="fa-solid fa-atom"></i>
                                     </span>
-                                    <input type="number" value="<?= isset($user) ? $user->getPlayer()->fusion_energy : ""; ?>" name="fusion_energy" class="form-control" placeholder="Energie de fusion" title="Energie de fusion">
+                                        <input type="number" value="<?= isset($user) ? $user->getPlayer()->fusion_energy : ""; ?>" name="fusion_energy" class="form-control" placeholder="Energie de fusion" title="Energie de fusion">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
     <div class="col-md-3">
         <div class="card h-100">
             <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>Crée le :</div>
-                    <div>
-                        <i class="fa-regular fa-clock me-1"></i><?= format_date_fr($user->created_at); ?>
+                <?php if(isset($user)) : ?>
+                    <div class="d-flex justify-content-between">
+                        <div>Crée le :</div>
+                        <div>
+                            <i class="fa-regular fa-clock me-1"></i><?= format_date_fr($user->created_at); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                    <div>Mise à jour le : </div>
-                    <div>
-                        <i class="fa-regular fa-clock me-1"></i><?= format_date_fr($user->updated_at); ?>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>Mise à jour le : </div>
+                        <div>
+                            <i class="fa-regular fa-clock me-1"></i><?= format_date_fr($user->updated_at); ?>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
                 <div class="d-grid">
                     <?php if(isset($user)) :
                         echo form_hidden('id', (string) $user->id);
