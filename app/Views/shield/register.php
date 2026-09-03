@@ -32,7 +32,7 @@
                         <label for="email" class="form-label">Adresse email</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" name="email" id="email" inputmode="email" autocomplete="email" placeholder="votre@email.com" value="<?= old('email') ?>" required>
+                            <input type="email" class="form-control" name="email" id="email" inputmode="email" autocomplete="" placeholder="votre@email.com" value="" required>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         <label for="username" class="form-label">Nom d'utilisateur</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" class="form-control" name="username" id="username" inputmode="text" autocomplete="username" placeholder="Pseudo" value="<?= old('username') ?>" required>
+                            <input type="text" class="form-control" name="username" id="username" inputmode="text" autocomplete="" placeholder="Pseudo" value="" required>
                         </div>
                     </div>
 

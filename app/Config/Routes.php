@@ -20,6 +20,13 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'gr
         $routes->get('new', 'UserController::new');
         $routes->post('update', 'UserController::update');
         $routes->post('create', 'UserController::create');
+
+    });
+    $routes->group('level-threshold', function ($routes) {
+        $routes->get('/', 'LevelThresholdController::index');
+        $routes->get('new', 'LevelThresholdController::new');
+        $routes->post('insert', 'LevelThresholdController::insert');
+        $routes->post('delete', 'LevelThresholdController::delete');
+        $routes->post('update', 'LevelThresholdController::update');
     });
 });
-
