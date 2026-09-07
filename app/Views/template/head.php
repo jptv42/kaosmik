@@ -9,7 +9,7 @@
         <meta name="author" content="<?= $author ?? "" ?>">
         <meta name="keyword" content="<?= $keyword ?? "" ?>">
 
-            <!--TODO FAVICON-->
+        <!--FAVICON-->
         <link rel="icon" type="image/png" href="<?= base_url("/assets/img/favicon/favicon-96x96.png"); ?>" sizes="96x96" />
         <link rel="icon" type="image/svg+xml" href="<?= base_url("/assets/img/favicon/favicon.svg"); ?>" />
         <link rel="shortcut icon" href="<?= base_url("/assets/img/favicon/favicon.ico"); ?>" />

@@ -25,11 +25,6 @@ class LevelThresholdController extends BaseController
         // Envoie les thresholds à la vue pour affichage
         return $this->render('admin/level-thresholds/index', ['levelThresholds' => $levelThresholds]);
     }
-    public function new()
-    {
-        helper('form');
-        return $this->render('admin/level-thresholds/form');
-    }
 
     public function insert(){
         $data = $this->request->getPost();

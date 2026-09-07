@@ -10,7 +10,7 @@
   "user": {
     "title" : "Utilisateurs",
     "url": "/admin/user",
-    "icon": "<i class=\"fa-regular fa-user\"></i>",
+    "icon": "<i class=\"fa-solid fa-users\"></i></i>",
     "class" : ""
   },
 
@@ -18,6 +18,12 @@
     "title" : "Threshold",
     "url": "/admin/level-threshold",
     "icon": "<i class=\"fa-solid fa-angles-up\"></i>",
+    "class" : ""
+  },
+  "rarity_level": {
+    "title" : "Rarity_level",
+    "url": "/admin/rarity-level",
+    "icon": "<i class=\"fa-regular fa-star\"></i></i>",
     "class" : ""
   }
 }
