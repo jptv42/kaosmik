@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Entities\LevelThreshold;
 use CodeIgniter\Model;
 
 class LevelThresholdModel extends Model
