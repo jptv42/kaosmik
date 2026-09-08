@@ -15,11 +15,11 @@
                     </span>
                     <input type="text" name="name" class="form-control" placeholder="Nom de la rareté" title="Nom de la rareté" value="">
                 </div>
-                <div class="input-icon mb-3 ">
-                    <span class="input-icon-addon ">
-                          <i class="fa-solid fa-palette "></i>
-                    </span>
-                    <input type="color" name="color" class="form-control" title="Couleur" value="">
+                <div class="d-flex justify-content-between align-items-center mb-3 form-control ">
+                    <label for="color" style="color: var(--tblr-icon-color); font-size: 1.2em">
+                        <i class="fa-solid fa-palette me-2"></i> Couleur
+                    </label>
+                    <input type="color" id="color" name="color" class="form-control form-control-color" placeholder="Couleur de la rareté" value="" title="Couleur" required>
                 </div>
                 <div class="input-icon mb-3">
                     <span class="input-icon-addon">
@@ -63,9 +63,7 @@
                     <?php foreach ($rarityLevels as $rarityLevel): ?>
                     <tr>
                         <td><?= $rarityLevel->name?></td>
-                        <td>
-                            <span style="display:inline-block;width:25px;height:25px;background-color:<?= $rarityLevel->color?>;vertical-align:middle;margin-right:5px;"></span><?= $rarityLevel->color?>
-                            </td>
+                        <td><h3><span class="badge" style="background-color:<?= $rarityLevel->color; ?>"><?= $rarityLevel->color; ?></span></h3></td>
                         <td><?= $rarityLevel->power_multiplier?></td>
                         <td><?= $rarityLevel->cost_multiplier?></td>
                         <td><?= $rarityLevel->appearance_rate?> %</td>
@@ -104,33 +102,32 @@
             <div class="modal-body">
                 <div class="input-icon mb-3">
                     <span class="input-icon-addon">
-
+                        <i class="fa-solid fa-tag"></i>
                     </span>
                     <input id="updateName" type="text" name="name" class="form-control" placeholder="Name" value="" title="Name">
                 </div>
-                <div class="input-icon mb-3">
-                    <span class="input-icon-addon">
-
-                    </span>
-                    <input id="updateColor" type="color" name="color" class="form-control form-control-color w-100" required title="couleur" placeholder="Couleur" value=""  title="Couleur">
+                <div class="d-flex justify-content-between align-items-center mb-3 form-control ">
+                    <label for="updateColor" style="color: var(--tblr-icon-color); font-size: 1em">
+                        <i class="fa-solid fa-palette me-2"></i> Couleur
+                    </label>
+                    <input type="color" id="updateColor" name="color" class="form-control form-control-color" placeholder="Couleur de la rareté" value="" title="Couleur" required>
                 </div>
                 <div class="input-icon mb-3">
                     <span class="input-icon-addon">
-
-                    </span>
-                    <input id="updatePower" type="number" name="power_multiplier" class="form-control" placeholder="Multi. power" value="" min="1" title="Multi. Power">
+                            <i class="fa-solid fa-hand-fist"></i></span>
+                    <input id="updatePower" type="number" name="power_multiplier" class="form-control" step='0.1' min='1' placeholder="Multiplicateur de force" value="" title="Multiplicateur de force" required>
                 </div>
                 <div class="input-icon mb-3">
-                    <span class="input-icon-addon">
-
-                    </span>
-                    <input id="updateCost" type="number" name="cost_multiplier" class="form-control" placeholder="Multi. cout" value="" min="1" title="Multi. cout">
+                        <span class="input-icon-addon">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                        </span>
+                    <input id="updateCost" type="number" name="cost_multiplier" class="form-control" step='0.1' min='1' placeholder="Multiplicateur de coût" value="" title="Multiplicateur de coût" required>
                 </div>
                 <div class="input-icon mb-3">
-                    <span class="input-icon-addon">
-
-                    </span>
-                    <input id="updateRate" type="number" name="appearance_rate" class="form-control" placeholder="Ratio apparition" value="" min="1" title="Ratio apparition">
+                            <span class="input-icon-addon">
+                                <i class="fa-solid fa-percent"></i>
+                            </span>
+                    <input id="updateAppearance" type="number" name="appearance_rate" class="form-control" step='1' min='0' max="50" placeholder="Taux d'apparition" value="" title="Taux d'apparition" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -159,5 +156,23 @@
             $('#updateRate').val(rate);
             modalEdit.show();
         })
+        // $(document).on('submit', 'form[action*="delete"]', function(e) {
+        //     e.preventDefault();
+        //     let form = $(this);
+        //     Swal.fire({
+        //         title:'Êtes-vous sûr ?',
+        //         text : 'Cette action est irréversible !',
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#dc3545',
+        //         cancelButtonColor: '#6c757d',
+        //         confirmButtonText: 'Oui, supprimer',
+        //         cancelButtonText: 'Annuler'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             form.get(0).submit();
+        //         }
+        //     })
+        // })
     });
 </script>
