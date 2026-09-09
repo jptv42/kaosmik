@@ -36,4 +36,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'gr
         $routes->post('delete', 'RarityLevelController::delete');
         $routes->post('update', 'RarityLevelController::update');
     });
+    $routes->group('hero-model',function($routes){
+        $routes->get('/', 'HeroModelController::index');
+        $routes->get('new','HeroModelController::new');
+        $routes->get('edit/(:num)','HeroModelController::edit/$1');
+        $routes->post('create-update','HeroModelController::createUpdate');
+        $routes->post('delete/(:num)', 'HeroModelController::delete/$1');
+    });
 });
