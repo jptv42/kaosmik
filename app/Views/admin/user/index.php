@@ -13,8 +13,8 @@
 <div class="row mt-3">
     <div class="col">
         <div class="card">
-            <div class="card-body">
-                <table class="table table-responsive table-hover table-striped" data-toggle="table" data-search="true" data-show-columns="true">
+            <div class="card-body table-responsive">
+                <table class="table table-hover table-striped" data-toggle="table" data-search="true" data-show-columns="true">
                     <thead>
                     <tr>
                         <th>#</th>
