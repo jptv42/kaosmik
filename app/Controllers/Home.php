@@ -6,6 +6,6 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return $this->render('home');
+        return $this->render('/admin/dashboard');
     }
 }

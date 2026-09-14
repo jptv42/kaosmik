@@ -1,19 +1,16 @@
 {
-
-  "Dashboard": {
-    "title" : "Dashboard",
-    "url": "/admin",
-    "icon": "<i class=\"fa-brands fa-black-tie\"></i>",
-    "class" : ""
+  "dashboard": {
+    "title" : "Tableau de bord",
+    "url" : "/admin",
+    "icon" : "<i class=\"fa-solid fa-chart-column\"></i>",
+    "class": ""
   },
-
   "user": {
     "title" : "Utilisateurs",
     "url": "/admin/user",
     "icon": "<i class=\"fa-solid fa-users\"></i></i>",
     "class" : ""
   },
-
   "threshold": {
     "title" : "Palier de niveau",
     "url": "/admin/level-threshold",
@@ -31,5 +28,11 @@
     "url": "/admin/hero-model",
     "icon": "<i class=\"fa-solid fa-shield-halved\"></i></i>",
     "class" : ""
-  }
+  },
+  "specializations": {
+  "title" : "Spécialisations des héros",
+  "url" : "/admin/specialization",
+  "icon" : "<i class=\"fa-solid fa-book\"></i>",
+  "class" : ""
+   }
 }

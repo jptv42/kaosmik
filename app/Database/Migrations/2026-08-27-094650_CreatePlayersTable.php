@@ -38,7 +38,7 @@ class CreatePlayersTable extends Migration
                 'unsigned'=>true,
                 'default'=>1000
             ],
-            'fusion_enerdy'=>[
+            'fusion_energy'=>[
                 'type'=>'INT',
                 'constraint'=>11,
                 'unsigned'=>true,
