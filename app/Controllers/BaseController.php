@@ -1,109 +1,153 @@
 <?php
 
-namespace App\Models;
+namespace App\Controllers;
 
-use App\Entities\RarityLevel;
-use CodeIgniter\Model;
+use CodeIgniter\Controller;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
-class RarityLevelModel extends Model
+/**
+ * BaseController provides a convenient place for loading components
+ * and performing functions that are needed by all your controllers.
+ *
+ * Extend this class in any new controllers:
+ * ```
+ *     class Home extends BaseController
+ * ```
+ *
+ * For security, be sure to declare any new methods as protected or private.
+ */
+abstract class BaseController extends Controller
 {
-    protected $table            = 'rarity_levels';
-    protected $primaryKey       = 'id';
-    protected $useAutoIncrement = true;
-    protected $returnType       = RarityLevel::class;
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'color', 'power_multiplier', 'cost_multiplier', 'appearance_rate'];
-    protected bool $allowEmptyInserts = false;
-    protected bool $updateOnlyChanged = true;
+    /**
+     * Be sure to declare properties for any property fetch you initialized.
+     * The creation of dynamic property is deprecated in PHP 8.2.
+     */
 
-    protected array $casts = [];
-    protected array $castHandlers = [];
+    protected $session;
+    protected $start_session = true;
 
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected array $messages = [];
 
-    // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
-    protected $skipValidation       = false;
-    protected $cleanValidationRules = true;
+    protected $title = "";
+    protected $title_suffix = "Kaosmik";
+    protected $description = "";
+    protected $author = "";
+    protected $keywords = "";
+    protected $current_menu = "";
+    protected $layout = "front";
+    /**
+     * @return void
+     */
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    {
+        // Load here all helpers you want to be available in your controllers that extend BaseController.
+        // Caution: Do not put the this below the parent::initController() call below.
+        // $this->helpers = ['form', 'url'];
 
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert   = ['convertAppearanceRate'];
-    protected $afterInsert    = ['calculateCommonAppearanceRate'];
-    protected $beforeUpdate   = ['convertAppearanceRate'];
-    protected $afterUpdate    = ['calculateCommonAppearanceRate'];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = ['protectDefaultRarity'];
-    protected $afterDelete    = ['calculateCommonAppearanceRate'];
+        // Caution: Do not edit this line.
+        parent::initController($request, $response, $logger);
 
-    protected function convertAppearanceRate(array $data) {
-        if (isset($data['data']['appearance_rate'])) {
-            $data['data']['appearance_rate'] = (float) str_replace(',', '.', $data['data']['appearance_rate']);
+        if ($this->start_session) {
+            $this->session = session();
+            if (session()->has('messages')) {
+                $this->messages = session()->getFlashdata('messages');
+            }
         }
-        return $data;
+    }
+
+    public function render($view = null, $datas = [], $options = []) {
+        $flashData = session()->getFlashdata('data');
+        if ($flashData) {
+            $datas = array_merge($datas, $flashData);
+        }
+
+        $headData = [
+            'title' => sprintf("%s : %s", $this->title, $this->title_suffix),
+            'description' => $this->description,
+            'author' => $this->author,
+            'keywords' => $this->keywords,
+            'menus' => $this->loadMenu(),
+            'current_menu' => $this->current_menu,
+            'logged_user' => auth()->user(),
+            'layout' => $this->layout,
+        ];
+
+        return view('template/head', $headData)
+            .view($view, $datas,$options)
+            .view('template/footer', ['messages' => $this->messages]);
+    }
+
+    protected function loadMenu() {
+        $filename = APPPATH . "Config";
+        $filename .= "/menu-{$this->layout}.json";
+
+        if(!file_exists($filename)) {
+            log_message("error", "Menu file not found");
+            return [];
+        }
+
+        $json = file_get_contents($filename);
+        $menu = json_decode($json, true);
+
+        if (!is_array($menu)) {
+            log_message("error", "Menu json is not an array : " . $filename);
+            return [];
+        }
+
+        return $menu;
+    }
+
+    public function redirect(string $url, array $data = [])
+    {
+        // Ajout des messages à la session si présents
+        if (!empty($this->messages)) {
+            session()->setFlashdata('messages', $this->messages);
+        }
+
+        // Ajout des données supplémentaires à la session si présentes
+        if (!empty($data)) {
+            session()->setFlashdata('data', $data);
+        }
+
+        // Redirection avec la méthode CI4
+        return redirect()->to(base_url($url));
     }
 
     /**
-     * Empêche la suppression/modification de la valeur par défaut Commun (id 1)
-     * @throws \Exception
+     * Ajoute un message de succès
+     * @param string $txt Message à afficher
+     * @return void
      */
-    protected function protectDefaultRarity(array $data) {
-
-        $id = $data['id'][0] ?? null;
-        if($id == 1) {
-            throw new \Exception('Interdiction de modifier ou supprimer la rareté par défaut (commun)');
-        }
-        return $data;
+    public function success($txt) {
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-success', 'type' => 'success'];
     }
 
-    protected function calculateCommonAppearanceRate(array $data) {
-        //Gestion de l'ID
-        $id = $data['id'];
-        if(is_array($id)) {
-            $id = $id[0] ?? null;
-        }
-        //On bloque quand même toujours le 1
-        if ($id == 1) {
-            return $data;
-        }
-
-        //On calcul la somme de toutes les raretés autres que commun
-        $result = $this->select('SUM(appearance_rate) as total')
-            ->where(['id !=' => 1])
-            ->first();
-
-        $sum = $result->total ?? 0;
-        $newCommonRate = 100 - $sum;
-        //On empêche le negatif
-        $newCommonRate = max(0, $newCommonRate);
-
-        //On MaJ le commun en empêchant le callback d'être appeler pour ne pas boucler à l'infini
-        $this->db->table('rarity_levels')
-            ->update(['appearance_rate' => $newCommonRate], ['id' => 1]);
-
-        return $data;
+    /**
+     * Ajoute un message informatif
+     * @param string $txt Message à afficher
+     * @return void
+     */
+    public function message($txt){
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-info', 'type' => 'info'];
     }
 
-    public function getRandomRarity() {
-        //Générer un nombre en 1 et 100
-        $random = rand(1,100);
-        $sum = 0;
+    /**
+     * Ajout d'un message d'avertissement
+     * @param string $txt Message à afficher
+     * @return void
+     */
+    public function warning($txt){
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-warning', 'type' => 'warning'];
+    }
 
-        //Récuperer toute les raretés
-        $rarities = $this->orderBy('appearance_rate', 'DESC')->findAll();
-        foreach($rarities as $rarity) {
-            $sum += $rarity->appearance_rate;
-            if($random <= $sum) {
-                return $rarity;
-            }
-        }
+    /**
+     * Ajout d'un message d'erreur
+     * @param string $txt Message à afficher
+     * @return void
+     */
+    public function error($txt){
+        $this->messages[] = ['txt' => $txt, 'class' => 'alert-danger', 'type' => 'error'];
     }
 }

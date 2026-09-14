@@ -5,11 +5,19 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
+//Routes pour l'authentification
 $routes->get('login', [AuthController::class, 'loginView']);
 $routes->post('login', [AuthController::class, 'loginAction']);
 $routes->get('register', [AuthController::class, 'registerView']);
 $routes->post('register', [AuthController::class, 'registerAction']);
 $routes->get('logout', [AuthController::class, 'logoutAction']);
+
+//Routes l'utilisateur connecté
+$routes->group('',['filter'=>'session'],function($routes){
+    $routes->group('cantina',function($routes){
+        $routes->get('/','CantinaController::index');
+    });
+});
 
 //Routes pour l'administration
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'group:admin'], function ($routes) {
@@ -31,16 +39,21 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'gr
     });
     $routes->group('rarity-level', function ($routes) {
         $routes->get('/', 'RarityLevelController::index');
-        $routes->get('new', 'RarityLevelController::new');
-        $routes->post('insert', 'RarityLevelController::insert');
-        $routes->post('delete', 'RarityLevelController::delete');
         $routes->post('update', 'RarityLevelController::update');
+        $routes->post('create', 'RarityLevelController::create');
+        $routes->post('delete', 'RarityLevelController::delete');
     });
     $routes->group('hero-model',function($routes){
         $routes->get('/', 'HeroModelController::index');
         $routes->get('new','HeroModelController::new');
         $routes->get('edit/(:num)','HeroModelController::edit/$1');
         $routes->post('create-update','HeroModelController::createUpdate');
-        $routes->post('delete/(:num)', 'HeroModelController::delete/$1');
+        $routes->get('delete/(:num)', 'HeroModelController::delete/$1');
+    });
+    $routes->group('specialization',function($routes){
+        $routes->get('/','SpecializationController::index');
+        $routes->post('insert','SpecializationController::insert');
+        $routes->post('delete/(:num)','SpecializationController::delete/$1');
+        $routes->post('edit/(:num)','SpecializationController::edit/$1');
     });
 });

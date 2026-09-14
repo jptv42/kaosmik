@@ -8,7 +8,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <div class="card-title">Ajouter un niveau</div>
-                <?= form_open('admin/level-threshold/create') ?>
+                <?= form_open('admin/level-threshold/insert') ?>
                 <div class="input-icon mb-3">
                     <span class="input-icon-addon">
                         <i class="fa-solid fa-n fa-xs"></i>

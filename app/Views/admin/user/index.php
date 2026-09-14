@@ -37,6 +37,9 @@
                                 <a href="<?= base_url('admin/user/edit/' . $user->id) ?>" class="btn btn-primary btn-icon">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
+                                <a href="<?=base_url('admin/user/delete/' . $user->id)?>" class="btn btn-danger btn-icon">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
