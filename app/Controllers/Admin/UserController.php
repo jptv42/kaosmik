@@ -13,14 +13,13 @@ namespace App\Controllers\Admin;
  * On importe les classes dont on a besoin dans ce fichier.
  * Sans ces lignes, PHP ne saurait pas où trouver "BaseController", "Player", etc.
  */
+
 use App\Controllers\BaseController;
 use App\Entities\Player;
 use App\Entities\User;
-use CodeIgniter\HTTP\ResponseInterface;
 
 /**
  * CONTRÔLEUR ADMIN - GESTION DES UTILISATEURS
- *
  *
  * Un contrôleur reçoit les requêtes HTTP et orchestre la logique de l'application.
  * Il fait le lien entre :
@@ -54,6 +53,7 @@ class UserController extends BaseController
     private $userModel;
     private $playerModel;
 
+    protected $current_menu = 'user';
     /**
      * CONSTRUCTEUR
      *
@@ -267,5 +267,53 @@ class UserController extends BaseController
 
         $this->success("L'utilisateur " . $user->username . " a été créé avec succès.");
         return $this->redirect('/admin/user');
+    }
+    /**
+     * DELETE - TRAITEMENT DE LA SUPPRESSION
+     *
+     * Reçoit l'ID de l'utilisateur (méthode POST) et supprime :
+     *   1. Le Player associé en premier (pour respecter la clé étrangère SQL).
+     *   2. L'User dans Shield.
+     */
+    /**
+     * DELETE - TRAITEMENT DE LA SUPPRESSION (via GET)
+     *
+     * Reçoit l'ID de l'utilisateur directement depuis l'URL.
+     * Exemple de route : /admin/user/delete/12
+     */
+    public function delete($id = null)
+    {
+        // 1. Vérifie si un ID est bien passé dans l'URL
+        $userId = $id ?? $this->request->getPost('id');
+
+        if (empty($userId)) {
+            $this->error("Il n'y a pas d'ID");
+            return $this->redirect('/admin/user');
+        }
+
+        // 2. Recherche de l'utilisateur
+        $user = $this->userModel->find($userId);
+        if ($user === null) {
+            $this->error("L'utilisateur à supprimer n'existe pas.");
+            return $this->redirect('/admin/user');
+        }
+
+        // 3. Suppression du Player associé
+        $player = $this->playerModel->where('user_id', $userId)->first();
+        if ($player !== null) {
+            // Le paramètre 'true' force la suppression physique (Hard Delete)
+            $this->playerModel->delete($player->id, true);
+        }
+
+        // 4. Suppression du User (Shield)
+        $deleted = $this->userModel->delete($userId, true);
+
+        if ($deleted) {
+            $this->success("Utilisateur effacé avec succès !");
+        } else {
+            $this->error("Une erreur est survenue lors de la suppression.");
+        }
+
+            return $this->redirect('/admin/user');
     }
 }

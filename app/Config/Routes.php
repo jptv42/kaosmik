@@ -5,6 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
+
 //Routes pour l'authentification
 $routes->get('login', [AuthController::class, 'loginView']);
 $routes->post('login', [AuthController::class, 'loginAction']);
@@ -12,48 +13,69 @@ $routes->get('register', [AuthController::class, 'registerView']);
 $routes->post('register', [AuthController::class, 'registerAction']);
 $routes->get('logout', [AuthController::class, 'logoutAction']);
 
-//Routes l'utilisateur connecté
-$routes->group('',['filter'=>'session'],function($routes){
-    $routes->group('cantina',function($routes){
-        $routes->get('/','CantinaController::index');
+//Routes pour l'utilisateur connecté
+$routes->group('', ['filter' => 'session'], function($routes) {
+    //Routes pour la cantina
+    $routes->group('cantina', function($routes) {
+        $routes->get('/', 'CantinaController::index');
+        $routes->post('refresh', 'CantinaController::refresh');
+        $routes->post('recruit/(:num)', 'CantinaController::recruit/$1');
     });
+    //Routes pour l'équipage
+    $routes->group('equipage', function($routes) {
+        $routes->get('/', 'CrewController::index');
+        $routes->post('sell/(:num)', 'CrewController::sell/$1');
+        $routes->post('sell-bulk', 'CrewController::sellBulk');
+    });
+    //Routes pour le profil
 });
 
 //Routes pour l'administration
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'group:admin'], function ($routes) {
+
     $routes->get('/', 'AdminController::index');
+
     $routes->group('user', function ($routes) {
         $routes->get('/', 'UserController::index');
         $routes->get('edit/(:num)', 'UserController::edit/$1');
         $routes->get('new', 'UserController::new');
         $routes->post('update', 'UserController::update');
         $routes->post('create', 'UserController::create');
-
+        $routes->get('delete/(:num)', 'UserController::delete/$1');
     });
+
     $routes->group('level-threshold', function ($routes) {
         $routes->get('/', 'LevelThresholdController::index');
-        $routes->get('new', 'LevelThresholdController::new');
-        $routes->post('insert', 'LevelThresholdController::insert');
-        $routes->post('delete', 'LevelThresholdController::delete');
         $routes->post('update', 'LevelThresholdController::update');
+        $routes->post('create', 'LevelThresholdController::create');
+        $routes->post('delete', 'LevelThresholdController::delete');
     });
+
     $routes->group('rarity-level', function ($routes) {
         $routes->get('/', 'RarityLevelController::index');
         $routes->post('update', 'RarityLevelController::update');
         $routes->post('create', 'RarityLevelController::create');
         $routes->post('delete', 'RarityLevelController::delete');
     });
-    $routes->group('hero-model',function($routes){
+
+    $routes->group('specialization', function ($routes) {
+        $routes->get('/', 'SpecializationController::index');
+        $routes->post('update', 'SpecializationController::update');
+        $routes->post('create', 'SpecializationController::create');
+        $routes->post('delete', 'SpecializationController::delete');
+    });
+
+    $routes->group('hero-model', function ($routes) {
         $routes->get('/', 'HeroModelController::index');
-        $routes->get('new','HeroModelController::new');
-        $routes->get('edit/(:num)','HeroModelController::edit/$1');
-        $routes->post('create-update','HeroModelController::createUpdate');
+        $routes->get('new', 'HeroModelController::new');
+        $routes->get('edit/(:num)', 'HeroModelController::edit/$1');
+        $routes->post('create-update', 'HeroModelController::createUpdate');
         $routes->get('delete/(:num)', 'HeroModelController::delete/$1');
     });
-    $routes->group('specialization',function($routes){
-        $routes->get('/','SpecializationController::index');
-        $routes->post('insert','SpecializationController::insert');
-        $routes->post('delete/(:num)','SpecializationController::delete/$1');
-        $routes->post('edit/(:num)','SpecializationController::edit/$1');
+    //Routes pour les missions
+    $routes->group('mission',function($routes){
+        $routes->get('/', 'MissionTemplatesController::index');
+        $routes->get('delete/(:num)', 'MissionTemplatesController::delete/$1');
+        $routes->post('edit/(:num)', 'MissionTemplatesController::edit/$1');
     });
 });

@@ -6,6 +6,7 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return $this->render('/admin/dashboard');
+        $heromodel = model('App\Models\HeroModelModel')->getRandom(3);
+        return $this->render('home', ['heromodel' => $heromodel]);
     }
 }
