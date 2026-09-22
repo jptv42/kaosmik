@@ -4,5 +4,17 @@
     "url" : "/cantina",
     "icon" : "<i class=\"fa-solid fa-person-rifle\"></i>",
     "class" : ""
+  },
+  "crew": {
+    "title" : "Equipage",
+    "url": "/equipage",
+    "icon":"<i class=\"fa-solid fa-users\"></i></i>",
+    "class" : ""
+  },
+  "mission": {
+    "title": "Missions",
+    "url": "/mission",
+    "icon": "<i class=\"fa-brands fa-space-awesome\"></i>",
+    "class": ""
   }
 }

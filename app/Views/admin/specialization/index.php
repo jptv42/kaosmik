@@ -10,7 +10,7 @@
             <div class="card-body">
                 <div class="card-title">Ajouter une spécialisation</div>
                 <div class="card-body">
-                    <?=form_open('admin/specialization/insert') ?>
+                    <?=form_open('admin/specialization/create') ?>
                     <div>
                         <input class="form-control mb-3 w-25" type="text" name="name" placeholder="Nom" value="">
                     </div>
@@ -63,7 +63,7 @@
                                             data-description="<?=$spe['description']?>">
                                         <i class="fa-solid fa-pen"></i>
                                     </span>
-                                    <?= form_open('admin/specialization/delete/' . $spe['id']) ?>
+                                    <?= form_open('admin/specialization/delete/'); ?>
                                     <?= form_hidden('id', $spe['id']);?>
                                     <?php if($spe['id'] != 1) :?>
                                     <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
@@ -89,7 +89,7 @@
                 <h1 class="modal-title fs-5">Modification de la spécialisation</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <?=form_open('admin/specialization/edit/' . $spe['id'])?>
+            <?=form_open('admin/specialization/update/')?>
             <input type="hidden" id="updateId" value="" name="id">
             <div class="modal-body">
                 <div>

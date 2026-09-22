@@ -1,9 +1,9 @@
 {
-  "dashboard": {
-    "title" : "Tableau de bord",
-    "url" : "/admin",
-    "icon" : "<i class=\"fa-solid fa-chart-column\"></i>",
-    "class": ""
+  "missions":{
+  "title" : "Missions",
+  "url" : "/admin/mission",
+  "icon" : "<i class=\"fa-brands fa-space-awesome\"></i>",
+  "class" : ""
   },
   "user": {
     "title" : "Utilisateurs",
@@ -12,7 +12,7 @@
     "class" : ""
   },
   "threshold": {
-    "title" : "Palier de niveau",
+    "title" : "Courbe de niveau",
     "url": "/admin/level-threshold",
     "icon": "<i class=\"fa-solid fa-angles-up\"></i>",
     "class" : ""
@@ -29,7 +29,7 @@
     "icon": "<i class=\"fa-solid fa-shield-halved\"></i></i>",
     "class" : ""
   },
-  "specializations": {
+  "specialization": {
   "title" : "Spécialisations des héros",
   "url" : "/admin/specialization",
   "icon" : "<i class=\"fa-solid fa-book\"></i>",

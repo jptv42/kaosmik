@@ -92,27 +92,16 @@ class RarityLevelModel extends Model
         return $data;
     }
 
-     /**
-     * Sélectionne une rareté de façon aléatoire en fonction de son taux d'apparition (tirage pondéré).
-     *
-     * @return object|array|null La rareté tirée au sort
-     */
-    public function getRandomRarity()
-    {
-        // 1. Générer un nombre aléatoire entre 1 et 100 (pourcentage)
-        $random = rand(1, 100);
+    public function getRandomRarity() {
+        //Générer un nombre en 1 et 100
+        $random = rand(1,100);
         $sum = 0;
 
-        // 2. Récupérer toutes les raretés triées par taux d'apparition décroissant
-        // Trier par taux décroissant permet d'optimiser les performances de la boucle
+        //Récuperer toute les raretés
         $rarities = $this->orderBy('appearance_rate', 'DESC')->findAll();
-
-        // 3. Parcourir les raretés et cumuler les probabilités (roulette d'itération)
-        foreach ($rarities as $rarity) {
+        foreach($rarities as $rarity) {
             $sum += $rarity->appearance_rate;
-
-            // Si le nombre aléatoire tombe dans la tranche cumulée actuelle, c'est cette rareté qui est choisie
-            if ($random <= $sum) {
+            if($random <= $sum) {
                 return $rarity;
             }
         }

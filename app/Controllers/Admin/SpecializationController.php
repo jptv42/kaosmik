@@ -23,16 +23,16 @@ class SpecializationController extends BaseController
 
     public function delete(){
         $data = $this->request->getPost();
-        if(isset($data['id'])){
+        if(isset($data['id']))
+        {
             $this->specializationModel->delete($data['id']);
-            $this->success("La spécialisation a été supprimé !");
+            $this->success("Spécialisation effacé avec succés !");
         }else{
-            $this->error("Il n'y pas de spécialisation");
+            $this->error("Il n'y a pas d'ID");
         }
         return $this->redirect('/admin/specialization');
     }
-    public function edit(){
-        helper('form');
+    public function update(){
         $data = $this->request->getPost();
         $id = $data['id'];
         unset($data['id']);
@@ -43,7 +43,7 @@ class SpecializationController extends BaseController
         }
         return $this->redirect('/admin/specialization');
     }
-    public function insert(){
+    public function create(){
         $data = $this->request->getPost();
         if(!isset($data['id'])){
             $this->specializationModel->insert($data);
