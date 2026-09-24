@@ -102,13 +102,3 @@
         </div>
     </div>
 </div>
-
-<!-- En-tête de la page : Titre dynamique selon l'action (Création ou Édition) -->
-<div class="row align-items-center mb-3">
-    <div class="col">
-        <div class="page-title">
-            <!-- Si $hm existe, on est en mode édition, sinon en mode création -->
-            <?= isset($hm) ? "Modification du modèle " . $hm->name : "Création d'un nouveau modèle"; ?>
-        </div>
-    </div>
-</div>

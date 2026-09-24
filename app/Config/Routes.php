@@ -27,7 +27,10 @@ $routes->group('', ['filter' => 'session'], function($routes) {
         $routes->post('sell/(:num)', 'CrewController::sell/$1');
         $routes->post('sell-bulk', 'CrewController::sellBulk');
     });
-    //Routes pour le profil
+    //Routes pour les missions
+    $routes->group('mission',function($routes) {
+        $routes->get('/', 'MissionController::index');
+    });
 });
 
 //Routes pour l'administration
@@ -74,8 +77,10 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'gr
     });
     //Routes pour les missions
     $routes->group('mission',function($routes){
-        $routes->get('/', 'MissionTemplatesController::index');
-        $routes->get('delete/(:num)', 'MissionTemplatesController::delete/$1');
-        $routes->post('edit/(:num)', 'MissionTemplatesController::edit/$1');
+        $routes->get('/', 'MissionController::index');
+        $routes->get('new', 'MissionController::new');
+        $routes->get('edit/(:num)', 'MissionController::edit/$1');
+        $routes->get('delete/(:num)', 'MissionController::delete/$1');
+        $routes->post('create-update', 'MissionController::createUpdate');
     });
 });

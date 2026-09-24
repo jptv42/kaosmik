@@ -2,17 +2,33 @@
 
 namespace App\Models;
 
+use App\Entities\Mission;
 use CodeIgniter\Model;
 
-class MissionTemplatesModel extends Model
+class MissionModel extends Model
 {
-    protected $table            = 'mission_templates';
+    protected $table            = 'missions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $returnType       = Mission::class;
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['title','description','level_required','power_required','stamina_cost','team_size_max','credits_reward','energy_reward','experience_reward'];
+    protected $allowedFields    = [
+        'title',
+        'description',
+        'level_required',
+        'power_required_min',
+        'power_required_max',
+        'stamina_cost_min',
+        'stamina_cost_max',
+        'team_size_max',
+        'credits_reward_min',
+        'credits_reward_max',
+        'energy_reward_min',
+        'energy_reward_max',
+        'experience_reward_min',
+        'experience_reward_max',
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
