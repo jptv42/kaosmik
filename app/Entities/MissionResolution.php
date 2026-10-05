@@ -15,6 +15,7 @@ class MissionResolution extends Entity
         'success' => false,
         'credits_gained' => 0,
         'energy_gained' => 0,
+        'experience_gained' => 0,
     ];
     protected $datamap = [];
     protected $dates   = ['created_at', 'updated_at'];
@@ -25,6 +26,7 @@ class MissionResolution extends Entity
         'success' => 'boolean',
         'credits_gained' => 'int',
         'energy_gained' => 'int',
+        'experience_gained' => 'int',
     ];
 
     protected ?Player  $player = null;

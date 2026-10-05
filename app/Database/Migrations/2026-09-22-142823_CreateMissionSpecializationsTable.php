@@ -29,7 +29,7 @@ class CreateMissionSpecializationsTable extends Migration
             ]
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('mission_id', 'missions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('mission_id', 'mission', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('specialization_id', 'specializations', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('mission_specializations');
     }

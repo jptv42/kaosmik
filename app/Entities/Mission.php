@@ -42,4 +42,21 @@ class Mission extends Entity
         'experience_reward_min' => 'int',
         'experience_reward_max' => 'int',
     ];
+
+    public function getSpecializations() {
+        $msm = model('MissionSpecializationModel');
+        $missionSpecializations =
+            $msm->join('specializations', 'specializations.id = mission_specializations.specialization_id')
+                ->where('mission_id', $this->attributes['id'])
+                ->findAll();
+        return $missionSpecializations;
+    }
+
+    public function getStaminaRequired() {
+        return $this->attributes['stamina_cost_max'];
+    }
+
+    public function getPowerRequired() {
+        return $this->attributes['power_required_max'];
+    }
 }

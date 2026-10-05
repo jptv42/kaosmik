@@ -110,11 +110,11 @@ class CreateMissionTable extends Migration
             ]
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('missions');
+        $this->forge->createTable('mission');
     }
 
     public function down()
     {
-        $this->forge->dropTable('missions');
+        $this->forge->dropTable('mission');
     }
 }

@@ -4,53 +4,62 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\SpecializationModel;
-use codeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\HTTP\ResponseInterface;
 
 class SpecializationController extends BaseController
 {
-    protected $specializationModel;
+    private $specializationModel;
     protected $layout = 'back';
+    protected $current_menu = 'specialization';
 
     public function __construct(){
-        $this->specializationModel = model("SpecializationModel");
+        $this->specializationModel = model('SpecializationModel');
     }
+
     public function index()
     {
         helper('form');
         $specializations = $this->specializationModel->findAll();
-        return $this->render('/admin/specialization/index', ['specializations'=>$specializations]);
+        return $this->render('admin/specialization/index', ['specializations' => $specializations]);
     }
 
-    public function delete(){
+    public function create() {
         $data = $this->request->getPost();
-        if(isset($data['id']))
-        {
-            $this->specializationModel->delete($data['id']);
-            $this->success("Spécialisation effacé avec succés !");
-        }else{
-            $this->error("Il n'y a pas d'ID");
+        if ($this->specializationModel->insert($data)) {
+            $this->success('Spécialisation ajoutée');
+        } else {
+            $this->error("Une erreur est survenue, la spécialisation n'est pas ajoutée.");
         }
-        return $this->redirect('/admin/specialization');
+        return $this->redirect('admin/specialization');
     }
-    public function update(){
+
+    public function update() {
         $data = $this->request->getPost();
         $id = $data['id'];
         unset($data['id']);
-        if($this->specializationModel->update($id,$data)){
-            $this->success('La spécialisation a été modifié !');
-        }else{
-            $this->error('La modification a échoué !');
+        try {
+            if ($this->specializationModel->update($id, $data)) {
+                $this->success('Spécialisation modifiée');
+            } else {
+                $this->error("Une erreur est survenue, la spécialisation n'est pas modifiée.");
+            }
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-        return $this->redirect('/admin/specialization');
+        return $this->redirect('admin/specialization');
     }
-    public function create(){
-        $data = $this->request->getPost();
-        if(!isset($data['id'])){
-            $this->specializationModel->insert($data);
-            $this->success('La spécialisation a bien été créée !');
-        }else{
-            $this->error('La spécialisation n\'a pas été créée!');
+
+    public function delete() {
+        try {
+            $id = $this->request->getPost('id');
+            if ($this->specializationModel->delete($id)) {
+                $this->success('Spécialisation supprimée');
+            } else {
+                $this->error('Une erreur est survenue');
+            }
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-        return $this->redirect('/admin/specialization');
+        return $this->redirect('admin/specialization');
     }
 }

@@ -44,10 +44,15 @@ class SpecializationModel extends Model
     protected $beforeDelete   = ['protectDefaultSpecialization'];
     protected $afterDelete    = [];
 
-    protected function protectDefaultSpecialization(array $data){
-        $id = $data['id'][0]?? null;
-        if($id == 1){
-            throw new \Exception('Interdiction de modifier ou supprimer la spécialisation par défaut(recrue)');
+    /**
+     * Empêche la suppression/modification de la valeur par défaut Recrue (id 1)
+     * @throws \Exception
+     */
+    protected function protectDefaultSpecialization(array $data) {
+
+        $id = $data['id'][0] ?? null;
+        if($id == 1) {
+            throw new \Exception('Interdiction de modifier ou supprimer la spécialisation par défaut (recrue)');
         }
         return $data;
     }

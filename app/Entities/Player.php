@@ -30,6 +30,7 @@ class Player extends Entity
     protected $dates   = ['created_at', 'updated_at', 'deleted_at'];
 
     protected ?User $user = null;
+    protected $mission_resolutions = array();
 
     protected $heroes = array();
     public function getUser(): ?User
@@ -84,6 +85,15 @@ class Player extends Entity
         $heroModel = model('HeroModel');
         $this->heroes = $heroModel->where('player_id', $this->attributes['id'])->findAll();
         return $this->heroes;
+    }
+    public function getMissionResolutions() {
+        //Idée de cache si on appelle la fonction plusieurs fois dans une page on ne n'appelle qu'une fois dans la bdd car l'objet est tjours présent
+        if(!empty($this->mission_resolutions)) {
+            return $this->mission_resolutions;
+        }
+        $missionResolutionModel = model('MissionResolutionModel');
+        $this->mission_resolutions = $missionResolutionModel->where('player_id', $this->attributes['id'])->orderBy('created_at','DESC')->findAll();
+        return $this->mission_resolutions;
     }
 
     public function isFleetFull() {

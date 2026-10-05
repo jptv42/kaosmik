@@ -20,16 +20,26 @@ $routes->group('', ['filter' => 'session'], function($routes) {
         $routes->get('/', 'CantinaController::index');
         $routes->post('refresh', 'CantinaController::refresh');
         $routes->post('recruit/(:num)', 'CantinaController::recruit/$1');
+
     });
+
     //Routes pour l'équipage
     $routes->group('equipage', function($routes) {
         $routes->get('/', 'CrewController::index');
         $routes->post('sell/(:num)', 'CrewController::sell/$1');
         $routes->post('sell-bulk', 'CrewController::sellBulk');
     });
-    //Routes pour les missions
+    //Routes pour les mission
     $routes->group('mission',function($routes) {
         $routes->get('/', 'MissionController::index');
+        $routes->get('details/(:num)', 'MissionController::details/$1');
+        $routes->post('envoyer-l-equipage', 'MissionController::sendCrew');
+        $routes->post('send-crew', 'MissionController::validateMission');
+        $routes->get('resultats','MissionController::results');
+    });
+    //Routes pour le profil
+    $routes->group('mon-profil',function($routes) {
+        $routes->get('mes-anciennes-mission', 'UserController::oldMissions');
     });
 });
 
@@ -75,7 +85,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'gr
         $routes->post('create-update', 'HeroModelController::createUpdate');
         $routes->get('delete/(:num)', 'HeroModelController::delete/$1');
     });
-    //Routes pour les missions
+    //Routes pour les mission
     $routes->group('mission',function($routes){
         $routes->get('/', 'MissionController::index');
         $routes->get('new', 'MissionController::new');

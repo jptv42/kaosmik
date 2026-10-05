@@ -54,7 +54,7 @@ class CreateMissionResolutionsTable extends Migration
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('player_id', 'players', 'id');
-        $this->forge->addForeignKey('mission_id', 'missions', 'id');
+        $this->forge->addForeignKey('mission_id', 'mission', 'id');
         $this->forge->createTable('mission_resolutions');
     }
 

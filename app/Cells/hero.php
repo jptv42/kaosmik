@@ -1,7 +1,11 @@
-<div class="card h-100 border border-3 js-hero-card"
-     style="border-color: <?= $character->getRarity()->color; ?>!important"
-     data-id="<?=$character->id;?>"
-     data-sell-price="<?=(int)$character->cost_credit / 2;?>"
+<div class="card h-100 border border-3 js-hero-card shadow"
+     style                  = "border-color: <?= $character->getRarity()->color; ?>!important"
+     data-id                = "<?=$character->id;?>"
+     data-sell-price        = "<?=(int)$character->cost_credit / 2;?>"
+     data-power             = "<?=$character->power;?>";
+     data-stamina           = "<?=$character->stamina_current;?>";
+     data-specialization    ="<?=$character->getHeroModel()->getSpecialization()['id'];?>";
+
 >
     <div class="position-absolute top-0 start-0 m-3 d-none js-bulk-checkbox-container" style="z-index:10;">
         <input type="checkbox" class="form-check-input js-hero-select" style="transform: scale(1.5); cursor : pointer;">
@@ -10,10 +14,14 @@
     <img class="card-img-top"
          src="<?= (isset($character) && $character->getHeroModel()->getImage()) ? $character->getHeroModel()->getImage()->getUrl() : base_url('/assets/img/no-img.png'); ?>"
     >
+
     <div class="card-body d-flex flex-column">
+
         <span class="card-title mb-2"><?= $character->name ?></span>
         <span class="card-subtitle text-body-secondary"><?= $character->getHeroModel()->name ?></span>
-
+        <div class="ribbon" style="background-color:<?= $character->getRarity()->color;?>">
+            <?= $character->getHeroModel()->getSpecialization()['name']; ?>
+        </div>
         <div class="card-text mt-auto">
             <div class="text-center fs-1">
                 <i class="fa-solid fa-hand-fist"></i> <?= $character->power ?>
@@ -39,6 +47,15 @@
             </div>
         <?php endif; ?>
     </div>
+    <?php if($character instanceof \App\Entities\Hero) : ?>
+
+    <div class="progress" style="height:20px;">
+        <div class="progress-bar bg-kaosmik" style="width: <?=($character->stamina_current / $character->stamina_max) * 100; ?>%">
+            <?= $character->stamina_current; ?>
+        </div>
+    </div>
+
+    <?php endif; ?>
     <?php if($context == 'cantina') : ?>
         <?php if (auth()->user()->getPlayer()->isFleetFull()) : ?>
             <span class="mb-1 badge text-bg-danger">Equipage complet</span>
@@ -60,9 +77,6 @@
         </div>
         <?= form_close(); ?>
     <?php endif; ?>
-    <div class="ribbon" style="background-color: <?= $character->getRarity()->color; ?>">
-        <?= $character->getRarity()->name; ?>
-    </div>
 </div>
 
 <script>

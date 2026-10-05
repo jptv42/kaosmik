@@ -17,7 +17,7 @@
         <?=form_close()?>
     </div>
 </div>
-<div class="row row-cols-6 g-3">
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
     <?php
     foreach($logged_user->getPlayer()->getHeroes() as $hero) : ?>
         <div class="col">
@@ -103,7 +103,7 @@
         document.querySelectorAll('.js-hero-select').forEach(checkbox=>{
             checkbox.addEventListener('change',updateBulkTotal)
         })
-        //Confirmation Swal2 pour la vente en llot
+        //Confirmation Swal2 pour la vente en lot
         bulkForm.addEventListener('submit',function(e){
             e.preventDefault();
             const total = parseInt(bulkPrice.textContent) || 0;
