@@ -16,5 +16,11 @@
     "url": "/mission",
     "icon": "<i class=\"fa-brands fa-space-awesome\"></i>",
     "class": ""
+  },
+  "tchat": {
+    "title": "Tchat",
+    "url":"/chat",
+    "icon": "<i class=\"fa-regular fa-comments\"></i>",
+    "class": ""
   }
 }

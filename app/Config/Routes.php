@@ -41,6 +41,14 @@ $routes->group('', ['filter' => 'session'], function($routes) {
     $routes->group('mon-profil',function($routes) {
         $routes->get('mes-anciennes-mission', 'UserController::oldMissions');
     });
+    //Route pour le chat
+    $routes->group('chat', function($routes) {
+        $routes->get('/', 'ChatController::index');
+        $routes->get('new-messages', 'ChatController::newMessages');
+        //le (:any) prendra le user ou n'importe quel nom aprés le "/", il doit être après le new message
+        $routes->get('(:any)', 'ChatController::conversation/$1');
+        $routes->post('send', 'ChatController::send');
+    });
 });
 
 //Routes pour l'administration
