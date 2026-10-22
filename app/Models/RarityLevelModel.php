@@ -37,7 +37,7 @@ class RarityLevelModel extends Model
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['convertAppearanceRate'];
     protected $afterInsert    = ['calculateCommonAppearanceRate'];
-    protected $beforeUpdate   = ['convertAppearanceRate'];
+    protected $beforeUpdate   = ['convertAppearanceRate','protectDefaultRarity'];
     protected $afterUpdate    = ['calculateCommonAppearanceRate'];
     protected $beforeFind     = [];
     protected $afterFind      = [];

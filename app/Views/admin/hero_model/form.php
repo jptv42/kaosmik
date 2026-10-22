@@ -20,7 +20,7 @@
                         <span class="input-icon-addon">
                             <i class="fa-solid fa-tag"></i>
                         </span>
-                        <input type="text" name="name" class="form-control" placeholder="Nom" title="Nom" value="<?= isset($hm) ? $hm->name : ''?>" required>
+                        <input type="text" name="name" class="form-control" placeholder="Nom" title="Nom" value="<?= isset($hm) ? esc($hm->name) : ''?>" required>
                     </div>
                 </div>
                 <?php if (isset($hm)) : ?>
