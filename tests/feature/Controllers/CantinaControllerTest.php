@@ -58,19 +58,19 @@ final class CantinaControllerTest extends CIUnitTestCase{
         $result->assertSee('04:20:00');
     }
     //Recruter un mercenaire
-    public function testRecruitCreatesAHeroAndSpendsCredits(){
+    public function testRecruitCreatesAHeroAndSpendsCredits()
+    {
         $player = $this->createPlayer('joueur1');
         $this->actingAs($this->getUserOf($player));
 
         $this->get('/cantina');
-        $offer = model('CantinaModel')->where('player_id',$player->id)->first();
+        $offer = model('CantinaModel')->where('player_id', $player->id)->first();
 
-        $result = $this->post('/cantina/recruit/'.$offer->id);
+        $result = $this->post('/cantina/recruit/' . $offer->id);
 
         $result->assertRedirectTo(site_url('/cantina'));
-        $this->seeInDatabase('heroes',['player_id'=>$player->id,'name'=>$offer->name]);
-        $this->seeInDatabase('players',['id'=>$offer->player_id,'credits'=>1000 - $offer->cost_credits]);
+        $this->seeInDatabase('heroes', ['player_id' => $player->id, 'name' => $offer->name]);
+        $this->seeInDatabase('players', ['id' => $player->id, 'credits' => 1000 - $offer->cost_credit]);
     }
-
 
 }
