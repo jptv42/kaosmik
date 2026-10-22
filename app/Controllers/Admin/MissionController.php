@@ -112,18 +112,18 @@ class MissionController extends BaseController
         $mission = new Mission();
         $mission->fill($missiondata);
         $saveOk = $this->missionModel->save($mission);
-        if($saveOk) {
-            if (isset($missiondata['id'])) {
-                $this->success('La mission : ' . $mission->title . '. A bien été modifiée.');
-                $id = $missiondata['id'];
-            } else {
-                $this->success('La mission : ' . $mission->title . '. A bien été créée.');
-                // Après un insert, l'id est celui généré par la base
-                $id = $this->missionModel->getInsertID();
+            if($saveOk) {
+                if (isset($missiondata['id'])) {
+                    $this->success('La mission : ' . $mission->title . '. A bien été modifiée.');
+                    $id = $missiondata['id'];
+                } else{
+                    $this->success('La mission : ' . $mission->title . '. A bien été créée.');
+                    // Après un insert, l'id est celui généré par la base
+                    $id = $this->missionModel->getInsertID();
+                }
+                $this->syncSpecializations($id, $specializationIds);
+                return $this->redirect('admin/mission/edit/' . $id);
             }
-            $this->syncSpecializations($id, $specializationIds);
-            return $this->redirect('admin/mission/edit/' . $id);
-        }
         $this->error('Une erreur est survenue');
         return $this->redirect('/admin/mission');
     }

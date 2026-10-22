@@ -173,11 +173,5 @@
             // 5. Gestion des erreurs globales (coupure réseau, bug de code...)
             console.error('Erreur critique : ', error);
         });
-
-
-
-
-<script>
-
 </script>
 

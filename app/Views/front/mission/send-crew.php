@@ -15,25 +15,25 @@
                     <div class="col">
                         <div class="alert alert-danger" role="alert">
                             <?php if(count($mission->getSpecializations()) > 0) : ?>
-                                <div id="err-spe" data-state="0"><i class="fa-solid fa-mask"></i> Les besoins en spécialités n'ont pas été atteintes par vos mercenaires !</div>
+                                <div id="err-spe" data-state="0"><i class="fa-solid fa-mask"></i> Les besoins en spécialités n'ont pas été atteintes par vos mercenaires.</div>
                             <?php endif; ?>
-                            <div id="err-stam" class="d-none" data-state="1"><i class="fa-solid fa-bolt"></i> Au moins un de vos mercenaires n'a pas assez d'endurance pour la mission !</div>
-                            <div id="err-pow" data-state="0"><i class="fa-solid fa-hand-fist"></i> La puissance requise n'a pas été atteinte !</div>
+                            <div id="err-stam" class="d-none" data-state="1"><i class="fa-solid fa-bolt"></i> Au moins un de vos mercenaires n'a pas assez d'endurance pour la mission.</div>
+                            <div id="err-pow" data-state="0"><i class="fa-solid fa-hand-fist"></i> La puissance requise n'a pas été atteinte.</div>
                         </div>
                     </div>
                     <div class="col col-auto ms-auto">
-                        <?=form_open('mission/send-crew',['id' => 'form-send-squad'])?>
-                        <input type="hidden" name="mission_id" value="<?= $mission->id ?>">
+                        <?= form_open('mission/send-crew', ['id' => 'form-send-squad']); ?>
+                        <input type="hidden" name="mission_id" value="<?= $mission->id; ?>">
                         <div id="heroes-ids"></div>
                         <button id="send-squad" type="submit" class="btn btn-kaosmik" disabled>Envoyer en mission</button>
-                        <?=form_close();?>
+                        <?= form_close(); ?>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card mb-3">
             <div class="card-body">
-                <div class="row row-cols-3 row-cols-md-4 g-3" id="mission-squad" data-stamina-required="<?= $mission->getStaminaRequired();?>; ?>">
+                <div class="row row-cols-3 row-cols-md-4 g-3" id="mission-squad" data-stamina-required="<?= $mission->getStaminaRequired(); ?>">
                     <?php for($i=0; $i < $mission->team_size_max; $i++) : ?>
                         <div class="col js-squad-slot" data-slot-index="<?= $i; ?>">
                             <div class="card h-100 shadow default-slot" style="min-height: 331px">
@@ -91,17 +91,17 @@
         const staminaRequired = parseInt(missionSquad.dataset.staminaRequired);
         let total_power = 0;
 
-        const requiredSpecs=[];
-        const specsBadges = document.querySelectorAll('.js-mission-spec');
-        specsBadges.forEach(badge=>{
-            requiredSpecs.push(parseInt(badge.dataset.specId))
+        const requiredSpecs = [];
+        const specBadges = document.querySelectorAll('.js-mission-spec');
+        specBadges.forEach(badge => {
+            requiredSpecs.push(parseInt(badge.dataset.specId));
         });
 
         function updateSquadState() {
             const squadHeroes = Array.from(missionSquad.querySelectorAll('.squad-hero .js-hero-card'));
+            const heroesIdsInput = document.getElementById('heroes-ids');
             const hasHeroes = squadHeroes.length > 0;
             const alert = document.querySelector('.alert-danger');
-            const heroesIdsInput = document.getElementById('heroes-ids');
 
             //Puissance
             isPowerOk = total_power >= powerRequired;
@@ -116,6 +116,7 @@
                 }
             }
 
+            //Stamina
             isStaminaOk = true;
             squadHeroes.forEach(hero => {
                 const heroStamina = parseInt(hero.dataset.stamina);
@@ -125,33 +126,32 @@
             });
             if (errStam) errStam.classList.toggle('d-none', isStaminaOk);
 
-            //Spécialisations
-            if(requiredSpecs.length > 0){
-                //Etape 1 : lister les spécialisations de l'escouade
+            //Specialisations
+            if (requiredSpecs.length > 0) {
+                //Etape 1 : Lister les spécialisations de l'escouade
                 const squadSpecs = [];
-                squadHeroes.forEach(hero=>{
-                    squadSpecs.push(parseInt(hero.dataset.specialization))
+                squadHeroes.forEach(hero => {
+                    squadSpecs.push(parseInt(hero.dataset.specialization));
                 });
                 //Etape 2 : comparer les spécialisations de l'escouade avec celle de la mission
                 isSpecializationOk = true;
-                requiredSpecs.forEach(spec=>{
-                    //includes()==in array() en php
-                    if(!squadSpecs.includes(spec)){
+                requiredSpecs.forEach(spec => {
+                    //includes() == in_array() en php
+                    if(!squadSpecs.includes(spec)) {
                         isSpecializationOk = false;
                     }
                 });
-                if(errSpe) errSpe.classList.toggle('d-none',isSpecializationOk)
-            }else{
+                if (errSpe) errSpe.classList.toggle('d-none', isSpecializationOk);
+
+            } else {
                 isSpecializationOk = true;
             }
 
             //Validation
             const isSquadReady = isPowerOk && isStaminaOk && isSpecializationOk;
-            console.log(isSquadReady);
-            if(isSquadReady && hasHeroes){
-                heroesIdsInput.innerHTML = "";
-                squadHeroes.forEach(hero=>{
-                    console.log('non');
+            if (isSquadReady && hasHeroes) {
+                heroesIdsInput.innerHTML = '';
+                squadHeroes.forEach(hero => {
                     const hiddenInput = document.createElement('input');
                     hiddenInput.type = "hidden";
                     hiddenInput.name = "heroes_ids[]";
@@ -161,7 +161,6 @@
             }
             if(alert) alert.classList.toggle('d-none', isSquadReady);
             if(sendSquadBtn) sendSquadBtn.disabled = !isSquadReady;
-
         }
 
         // ALLER : Ajouter un héro dans l'escouade de mission
