@@ -1,0 +1,110 @@
+name: Tests Kaosmik
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    name: PHPUnit (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2']
+
+    # ── SERVICE MARIADB (même famille que le docker-compose du projet) ──
+    services:
+      mariadb:
+        image: mariadb:latest   # à épingler (poste local ET CI) une fois la version choisie
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: kaosmik_tests
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+    # 1 Télécharger le code
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2 Installer PHP (extensions requises par CodeIgniter 4 et le driver MySQLi)
+    - name: Setup PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: intl, mbstring, mysqli
+        coverage: none
+
+    # 3 Cache des téléchargements Composer
+    - name: Cache Composer downloads
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/composer
+        key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    # 4 Installer les dépendances (garder les dépendances de dev : Faker, PHPUnit)
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-interaction
+
+    # 5 Chercher les vulnérabilités connues des dépendances
+    - name: Composer audit
+      run: composer audit
+
+    # 6 Lancer les tests (la base de test est configurée dans phpunit.dist.xml)
+    - name: Run PHPUnit
+      run: vendor/bin/phpunit --no-coverage --colors=always
+
+    # 7 Conserver les rapports, même si les tests échouent
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: phpunit-logs-php${{ matrix.php-version }}
+        path: build/logs/
+    # (optionnel) Vérifier que les migrations passent sur une base vierge
+    - name: Check migrations
+      env:
+        CI_ENVIRONMENT: development
+        database.default.hostname: 127.0.0.1
+        database.default.database: kaosmik_tests
+        database.default.username: root
+        database.default.password: root
+        database.default.DBDriver: MySQLi
+        database.default.port: 3306
+      run: php spark migrate --all
+  coverage:
+    name: Couverture de code
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:latest
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: kaosmik_tests
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, mysqli
+          coverage: pcov
+      - run: composer install --prefer-dist --no-progress --no-interaction
+      - run: composer test:coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/coverage/
