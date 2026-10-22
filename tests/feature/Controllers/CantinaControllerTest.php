@@ -70,7 +70,7 @@ final class CantinaControllerTest extends CIUnitTestCase{
 
         $result->assertRedirectTo(site_url('/cantina'));
         $this->seeInDatabase('heroes', ['player_id' => $player->id, 'name' => $offer->name]);
-        $this->seeInDatabase('players', ['id' => $player->id, 'credits' => 1000 - $offer->cost_credit]);
+        $this->seeInDatabase('players',['id' => $player->id, 'credits' => 1000 - $offer->cost_credit]);
     }
 
 }
