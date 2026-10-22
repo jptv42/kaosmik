@@ -6,4 +6,4 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, GitHub Actions4!"
+      - run: echo "Hello, GitHub Actions5!"
