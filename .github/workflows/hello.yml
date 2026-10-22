@@ -6,4 +6,4 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, GitHub Actions5!"
+      - run: vendor/bin/phpunit --no-coverage
