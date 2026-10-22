@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ '8.2']
+        php-version: ['8.2']
 
     # ── SERVICE MARIADB (même famille que le docker-compose du projet) ──
     services:
