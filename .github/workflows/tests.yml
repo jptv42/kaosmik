@@ -1,9 +1,8 @@
 name: Tests PHP
 
 on:
-  push:
-    branches: [ main, test ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   tests:
@@ -28,3 +27,4 @@ jobs:
       # Étape 4 : Lancer les tests
       - name: Run tests
         run: vendor/bin/phpunit --no-coverage
+
