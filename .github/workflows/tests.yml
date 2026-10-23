@@ -14,7 +14,7 @@ jobs:
       matrix:
         php-version: ['8.2']
 
-    # ── SERVICE MARIADB (même famille que le docker-compose du projet) ──
+    # ── SERVICE MARIADB (même famille que le docker-composed du projet) ──
     services:
       mariadb:
         image: mariadb:latest   # à épingler (poste local ET CI) une fois la version choisie
