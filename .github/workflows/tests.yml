@@ -1,9 +1,6 @@
-name: Tests Kaosmik
-
+name: workflow.yml
 on:
   push:
-    branches: [ main ]
-
 jobs:
   tests:
     name: PHPUnit (PHP ${{ matrix.php-version }})
