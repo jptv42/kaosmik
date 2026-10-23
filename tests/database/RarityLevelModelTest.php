@@ -54,6 +54,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->assertEqualsWithDelta(73.0, $common->appearance_rate, 0.001);
     }
+
     //Traduction de la virgule
     public function testConvertAppearanceRateAcceptsComma()
     {
@@ -61,6 +62,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->assertEqualsWithDelta(3.5, $this->rarityModel->find($id)->appearance_rate, 0.001);
     }
+
     //Recalcul après insertion
     public function testCommonRateIsRecalculatedAfterInsert()
     {
@@ -69,6 +71,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
         // 73 - 10 = 63
         $this->assertEqualsWithDelta(63.0, $this->rarityModel->find(1)->appearance_rate, 0.001);
     }
+
     //Recalcul après suppression
     public function testCommonRateIsRecalculatedAfterDelete()
     {
@@ -77,6 +80,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->assertEqualsWithDelta(81.0, $this->rarityModel->find(1)->appearance_rate, 0.001);
     }
+
     //Le taux de « Commun » ne devient jamais négatif
     public function testCommonRateNeverGoesBelowZero()
     {
@@ -84,6 +88,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->assertEqualsWithDelta(0.0, $this->rarityModel->find(1)->appearance_rate, 0.001);
     }
+
     //Impossible de supprimer « Commun »
     public function testCannotDeleteDefaultRarity()
     {
@@ -92,6 +97,7 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->rarityModel->delete(1);
     }
+
 //Tirage d'une rareté
     public function testGetRandomRarityReturnsARarity()
     {
@@ -107,4 +113,13 @@ final class RarityLevelModelTest extends CIUnitTestCase
 
         $this->rarityModel->update(1, ['color' => '#000000']);
     }
+//Exercice : normalement, ce test échoue (« Failed asserting that exception of type "Exception" is thrown »).
+// Le test est cohérent avec ce que le code annonce : c’est le code qui est incomplet. Essayez de modifier RarityLevelModel pour qu’il passe.
+// Ne modifiez pas le test.
+//Correction possible : le hook protectDefaultRarity existe déjà, mais il n'est branché que sur la suppression.
+// Dans la section // Callbacks de app/Models/RarityLevelModel.php, branchez-le aussi avant une modification :
+//protected $beforeUpdate   = ['convertAppearanceRate', 'protectDefaultRarity'];
+//Lancez ensuite tout le fichier : le test passe, et les autres aussi
+// (le recalcul du taux de « Commun » met à jour la table sans repasser par le Model, il n'est donc pas bloqué par ce hook).
+
 }
