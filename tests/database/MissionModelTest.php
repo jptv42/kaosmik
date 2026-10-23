@@ -66,7 +66,4 @@ final class MissionModelTest extends CIUnitTestCase
 
         $this->assertNull($model->getRandom(1));
     }
-
-
-
 }
