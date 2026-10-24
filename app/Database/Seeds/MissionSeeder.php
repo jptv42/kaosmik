@@ -190,6 +190,6 @@ class MissionSeeder extends Seeder
             $mission['updated_at'] = $now;
         }
 
-        $this->db->table('mission')->insertBatch($missions);
+        $this->db->table('missions')->insertBatch($missions);
     }
 }
