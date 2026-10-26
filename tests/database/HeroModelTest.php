@@ -267,14 +267,14 @@ final class HeroModelTest extends CIUnitTestCase
         $this->seeInDatabase('heroes', ['id' => $hero->id, 'stamina_current' => 55]);
     }
 //    Pas de modification quand l'endurance est pleine
-        public function testFindDoesNotTouchStaminaOfFullHero()
-        {
-            $hero = $this->createHero($this->player, ['stamina_current' => 100, 'stamina_max' => 100]);
+    public function testFindDoesNotTouchStaminaOfFullHero()
+    {
+        $hero = $this->createHero($this->player, ['stamina_current' => 100, 'stamina_max' => 100]);
 
-            $found = $this->heroModel->find($hero->id);
+        $found = $this->heroModel->find($hero->id);
 
-            $this->assertSame(100, $found->stamina_current);
-        }
+        $this->assertSame(100, $found->stamina_current);
+    }
 
 
 }
