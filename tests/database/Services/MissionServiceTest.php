@@ -43,6 +43,7 @@ final class MissionServiceTest extends CIUnitTestCase
         $this->service->processMission($player,9999,[1]);
     }
 
+
     //Une équipe vide
     public function testEmptySquadThrowsException(){
         $player = $this->createPlayer('joueur1');
@@ -111,5 +112,6 @@ final class MissionServiceTest extends CIUnitTestCase
         $this->assertSame(1000 + $rewards['credits'], $fresh->credits);
         $this->assertSame($rewards['xp'], $fresh->experience);
     }
+
 
 }
