@@ -143,4 +143,36 @@ final class AuthControllerTest extends CIUnitTestCase{
 
         $result->assertStatus(200);
     }
+
+    #[DataProvider('invalidLoginProvider')]
+    public function testLoginWithInvalidCredentials(string $email, string $password, string $sessionKey, string|array $expected)
+    {
+        // 1. Préparation : création d'un joueur de base pour les tests
+        $this->createPlayer('joueur1');
+
+        // 2. Action : simulation d'une soumission de formulaire de connexion avec de mauvais identifiants
+        $result = $this->post('/login', ['email' => $email, 'password' => $password]);
+
+        // 3. Assertion : vérification qu'un message ou une erreur est bien renvoyé en session
+        $result->assertSessionHas($sessionKey, $expected);
+    }
+
+    /**
+     * Fournit différents cas de connexion invalides
+     */
+    public static function invalidLoginProvider(): array
+    {
+        return [
+            'email_inconnu'   => ['inconnu@kaosmik.test', 'Kaosmik2026!', 'error', 'Unable to log you in. Please check your credentials.'],
+            'password_errone' => ['joueur1@kaosmik.test', 'MauvaisMotDePasse1!', 'error', 'Unable to log you in. Please check your password.'],
+            'champs_vides'    => ['', '', 'errors', [
+                'email'    => 'The Email Address field is required.',
+                'password' => 'The Password field is required.',
+            ]],
+            'email_malforme'  => ['pasunemail', 'Kaosmik2026!', 'errors', [
+                'email' => 'The Email Address field must contain a valid email address.',
+            ]],
+        ];
+    }
+
 }

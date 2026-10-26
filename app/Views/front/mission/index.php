@@ -108,7 +108,7 @@
         const mission_list = document.getElementById('mission-list');
         const input_mission_id = document.getElementById('form-mission-id');
 
-        missioan_list.addEventListener('click', async (e) => {
+        mission_list.addEventListener('click', async (e) => {
             //remonte à partir du click à la div .js-mission la plus proche
             const mission = e.target.closest('.js-mission');
             if(!mission || mission.classList.contains('not-available')) return;
