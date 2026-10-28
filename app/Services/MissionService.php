@@ -1,21 +1,37 @@
 <?php
 namespace App\Services;
 
-use App\Entities\MissionHero;
+
 use App\Entities\MissionResolution;
 use Exception;
 class MissionService
 {
     protected $missionModel;
     protected $heroModel;
+    protected $missionResolutionModel;
+    protected $missionHeroModel;
     protected $playerModel;
 
     public function __construct() {
         $this->missionModel = model('MissionModel');
         $this->heroModel = model('HeroModel');
         $this->playerModel = model('PlayerModel');
+        $this->missionResolutionModel = model('MissionResolutionModel');
+        $this->missionHeroModel = model('MissionHeroModel');
     }
-    public function processMission($player, int $missionId,array $heroesIds)
+
+    /**
+     * Démarrer une mission.
+     * Vérification de l'existence de la mission.
+     * Vérification des Héros(existant,appartenant aux joueurs,disponibilité).
+     * Vérification de la possibilité de les envoyer en mission.
+     * @param Player $player Entité joueur
+     * @param int $missionId Identifiant de la mission
+     * @param array $heroesIds Liste des héros (ID)
+     * @return int Identifiant de la Mission Resolution
+     * @throws Exception
+     */
+    public function startMission($player, int $missionId,array $heroesIds)
     {
         $mission = $this->missionModel->find($missionId);
         if(!$mission) {
@@ -34,11 +50,76 @@ class MissionService
             throw new Exception("Un ou plusieurs mercenaires ne sont pas à vous");
         }
 
+        $busyHeroIds = $this->missionHeroModel->getBusyHeroIds($player->id);
+        foreach($heroes as $hero){
+            if(in_array((int)$hero->id, $busyHeroIds,true)) {
+                throw new Exception("Un héro proposé est déjà en mission.");
+            }
+        }
         $this->validateSquad($mission, $heroes);
-        $rewards=$this->calculateRewards($mission);
-        $rewards['heroes'] = $this->applyEffects($player, $heroes, $mission, $rewards);
-        return $rewards;
+
+        return $this->dispatchSquad($player, $heroes, $mission);
     }
+
+    /**
+     * Pour chaque mission du joueur terminé, on lance la méthode de résolution qui inclut la distribution des récompenses
+     * @param Player $player Entité joueur
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function resolveFinishedMission($player){
+        $resolved = [];
+        foreach($this->missionResolutionModel->getMissionFinishedNotResolved($player->id)as $mr){
+            $result = $this->resolveMission($player, $mr);
+            if($result !== null){
+                $resolved[] = $result;
+            }
+        }
+        return $resolved;
+    }
+
+    /**
+     * Création de la mission Resolution puis stockage des héros envoyés dans la mission
+     * @param Player $player Entité joueur
+     * @param array $heroes Liste des héros (entité)
+     * @param $mission Entité mission
+     * @return int Identifiant de la Mission Resolution
+     * @throws \ReflectionException
+     */
+    private function dispatchSquad($player,array $heroes,$mission){
+        $staminaRequired = (int) $mission->getStaminaRequired();
+                $endsAt = date('Y-m-d H:i:s', time() + (int) $mission->duration);
+
+        $mrId = $this->missionResolutionModel->insert([
+            'player_id' => $player->id,
+            'mission_id' => $mission->id,
+            'success' => false,
+            'ends_at' => $endsAt,
+        ]);
+
+        $missionHeroes =[];
+        foreach($heroes as $hero){
+            $missionHeroes[] = ['missions_resolution_id' => $mrId,'hero_id' => $hero->id];
+
+            $newStamina = max(0,(int) $hero->stamina_current - $staminaRequired);
+            $this->heroModel->update($hero->id, [
+                'stamina_current' => $newStamina,
+                'last_stamina_update'=>$endsAt,
+            ]);
+        }
+        $this->missionHeroModel->insertBatch($missionHeroes);
+        return (int) $mrId;
+    }
+
+    /**
+     * Vérification de l'équipe. Les pré-requis de la mission sont OK.
+     * Puissance demandée suffisante.
+     * Héros avec assez de stamina et spécialisation OK.
+     * @param Mission $mission Entité Mission
+     * @param array $heroes Liste des Héros (Entité)
+     * @return void
+     * @throws Exception
+     */
     private function validateSquad($mission, array $heroes)
     {
         $totalPower = 0;
@@ -71,6 +152,11 @@ class MissionService
             }
     }
 
+    /**
+     * Calcul des récompenses aléatoirement
+     * @param Mission $mission Entité Mission
+     * @return int[] Tableau des récompenses (entier)
+     */
     private function calculateRewards($mission)
     {
         $creditGain = mt_rand((int)$mission->credits_reward_min,(int)$mission->credits_reward_max);
@@ -84,34 +170,37 @@ class MissionService
         ];
     }
 
-    public function applyEffects($player, array $heroes, $mission, $rewards)
+    /**
+     * Termine une mission (Mission Resolution) et attribue les récompenses au joueur.
+     * @param $player
+     * @param $mr
+     * @return array
+     * @throws \ReflectionException
+     */
+    private function resolveMission($player, $mr)
     {
-        $staminaRequired = (int) $mission->getStaminaRequired();
-        $missionResolutionModel = model('MissionResolutionModel');
-        $missionHeroModel = model('MissionHeroModel');
-        //création d'une nouvelle instance objet pour recvoir les données
-        $mr = new MissionResolution();
-        $mr->credits_gained = $rewards['credits'];
-        $mr->energy_gained = $rewards['energy'];
-        $mr->experience_gained = $rewards['xp'];
-        $mr->mission_id = $mission->id;
-        $mr->player_id = $player->id;
-        $mr->success = true;
-        $id_mr = $missionResolutionModel->insert($mr);
+        $mission = $mr->getMission();
+        $rewards = $this->calculateRewards($mission);
 
-            foreach($heroes as $hero) {
-                $newStamina = max(0,(int) $hero->stamina_current - $staminaRequired);
-                //Met à jour l'objet
-                $hero->stamina_current = $newStamina;
-                $this->heroModel->update($hero->id,['stamina_current' => $newStamina, 'last_stamina_update'=>date('Y-m-d H:i:s')]);
-            }
+        $now = date('Y-m-d H:i:s');
+        $dataUpdate = [
+            'success'=> 1,
+            'credits_gained'=> $rewards['credits'],
+            'energy_gained'=> $rewards['energy'],
+            'experience_gained'=> $rewards['xp'],
+            'resolved_at'=> $now,
+        ];
+
+        $mr->fill($dataUpdate);
+
+        $this->missionResolutionModel->save($mr);
 
         $player->credits += $rewards['credits'];
         $player->fusion_energy += $rewards['energy'];
         $player->experience += $rewards['xp'];
         $this->playerModel->save($player);
 
-        return $heroes;
+        return ['mission'=>$mission] + $rewards;
 
     }
 }

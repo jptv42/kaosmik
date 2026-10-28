@@ -13,6 +13,6 @@ class UserController extends BaseController
     }
 
     public function oldMissions(){
-        return $this->render('front/profil/old-mission');
+        return $this->render('front/profil/old-missions');
     }
 }
