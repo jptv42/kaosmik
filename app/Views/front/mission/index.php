@@ -6,7 +6,17 @@
         </div>
     </div>
     <div class="col-auto ms-auto">
-        <a href="<?= base_url('mon-profil/mes-anciennes-mission') ?>" class="btn btn-sm btn-outline-kaosmik">Historique</a>
+        <a href="<?= base_url('mon-profil/mes-anciennes-mission') ?>" class="btn btn-sm btn-outline-primary">Historique</a>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+<!--                TODO SUIVI DE MISSION-->
+                Mission en cours
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">

@@ -30,6 +30,7 @@
                         <th data-sortable="false">Crédits</th>
                         <th data-sortable="false">Énergie</th>
                         <th data-sortable="false">Expérience</th>
+                        <th data-sortable="false">Temps de mission</th>
                         <th data-sortable="false">Actions</th>
                     </tr>
                     </thead>
@@ -45,6 +46,7 @@
                             <td><?= $mission->credits_reward_min; ?> / <?= $mission->credits_reward_max; ?></td>
                             <td><?= $mission->energy_reward_min; ?> / <?= $mission->energy_reward_max; ?></td>
                             <td><?= $mission->experience_reward_min; ?> / <?= $mission->experience_reward_max; ?></td>
+                            <td><?= $mission->getDurationLabel() ;?></td>
                             <td>
                                 <a href="<?= base_url('/admin/mission/edit/' . $mission->id); ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen"></i></a>
                                 <a href="<?= base_url('/admin/mission/delete/' . $mission->id); ?>" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>

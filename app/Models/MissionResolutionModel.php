@@ -20,6 +20,8 @@ class MissionResolutionModel extends Model
         'credits_gained',
         'energy_gained',
         'experience_gained',
+        'ends_at',
+        'resolved_at',
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -51,4 +53,30 @@ class MissionResolutionModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Mission d'un joueur terminée (ends_at) mais pas encore noté comme résolues (resolved_at)
+     * @param  $playerId
+     * @return mixed|null
+     */
+    public function getMissionFinishedNotResolved(int $playerId){
+        return $this->where('player_id', $playerId)
+            ->where('resolved_at',null)
+            ->where('ends_at <=',date('Y-m-d H:i:s'))
+            ->orderBy('ends_at','ASC')
+            ->findAll();
+    }
+
+    /**
+     * Mission d'un joueur en cours
+     * @param int $playerId
+     * @return mixed|null
+     */
+    public function getMissionInProgress(int $playerId){
+        return $this->where('player_id', $playerId)
+            ->where('resolved_at',null)
+            ->where('ends_at >',date('Y-m-d H:i:s'))
+            ->orderBy('ends_at','ASC')
+            ->findAll();
+    }
 }

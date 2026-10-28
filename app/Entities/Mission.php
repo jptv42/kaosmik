@@ -22,6 +22,7 @@ class Mission extends Entity
         'energy_reward_max' => null,
         'experience_reward_min' => null,
         'experience_reward_max' => null,
+        'duration' => 0,
     ];
     protected $datamap = [];
     protected $dates   = ['created_at', 'updated_at', 'deleted_at'];
@@ -41,6 +42,7 @@ class Mission extends Entity
         'energy_reward_max' => 'int',
         'experience_reward_min' => 'int',
         'experience_reward_max' => 'int',
+        'duration' => 'int',
     ];
 
     public function getSpecializations() {
@@ -63,5 +65,19 @@ class Mission extends Entity
     public function getImageMission() {
         $mediaModel = model('MediaModel');
         return $mediaModel->getOneMedia('hero_models', $this->id);
+    }
+
+    /**
+     * Durée au format lisible : "45s","5min","1h30"
+     * @return string
+     */
+    public function getDurationLabel(){
+        $d = (int)$this->attributes['duration'];
+        if($d < 60){
+            return $d . 's';
+        }
+        $h = intdiv($d,3600);
+        $m = intdiv($d % 3600,60);
+        return($h > 0 ? $h.'h':'') . ($m > 0 ? $m :'') . ($h > 0 ? '' : 'min');
     }
 }
